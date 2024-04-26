@@ -10,10 +10,16 @@ import { useEffect } from "react"
 import ProbClearAlert from "~/app/_components/elements/probClearAlert/probClearAlert"
 import EntranceSendingText from "~/features/sendingText/entranceSendingText"
 import Floor1Map from "~/app/_components/elements/floormap/floor1/floor1Map"
+import { api } from "~/trpc/react"
 
 
-const EntranceComponent = () => {
+const EntranceComponent = ({ username, userId }: { username: string, userId: string }) => {
   const { playerData, setPlayerData } = usePlayerDataStore();
+  const entranceData = api.floor1.getEntranceData.useQuery({ userId: userId })
+
+
+  console.log(entranceData.data)
+
   // 現在位置の更新
   useEffect(() => {
     setPlayerData(
@@ -29,7 +35,7 @@ const EntranceComponent = () => {
 
   return (
     <div>
-      <EntranceSendingText />
+      <EntranceSendingText username={username} />
 
       <UpArrow floor={1} hrefProps={"socialroom"} />
       <RightArrow floor={1} hrefProps={"cafeteria"} />

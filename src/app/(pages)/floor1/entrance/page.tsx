@@ -1,9 +1,16 @@
 import EntranceComponent from "~/app/pageComponents/floor1/entranceComponent"
+import { getServerAuthSession } from "~/server/auth"
 
-const Entrance = () => {
+const Entrance = async () => {
 
-  return(
-    <EntranceComponent />
+  const session = await getServerAuthSession()
+
+  return (
+    <>
+      {session?.user.name && (
+        <EntranceComponent username={session?.user.name} userId={session.user.id} />
+      )}
+    </>
   )
 }
 

@@ -9,6 +9,7 @@ import { api } from "~/trpc/react"
 
 const BathroomComponent = ({ userId }: { userId: string }) => {
   const bathroomData = api.bathroom.getBathRoomData.useQuery({ userId: userId })
+  const getBathRoomData = api.bathroom.getBathRoomData.useQuery({ userId: userId })
   const updateCurrentRoom = api.floor.updateCurrentRoom.useMutation({})
 
   // const { setPlayerData } = usePlayerDataStore();
@@ -16,7 +17,7 @@ const BathroomComponent = ({ userId }: { userId: string }) => {
   // useEffect(() => {
   //   setPlayerData({ currentRoom: "bathroom" })
   // }, [setPlayerData])
-  
+
   const handleEnterRoom = () => {
     updateCurrentRoom.mutate({
       userId: userId,
@@ -28,12 +29,12 @@ const BathroomComponent = ({ userId }: { userId: string }) => {
   useEffect(() => {
     handleEnterRoom()
   }, [])
-  
+
   return (
     <div>
       <RightArrow floor={1} hrefProps={"entrance"} />
 
-      <ItemBase currentRoom={"bathroom"} />
+      <ItemBase currentRoom={"bathroom"} userId={userId} />
 
       <Floor1Map />
       <Belongings />

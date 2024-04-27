@@ -83,6 +83,12 @@ export const authOptions: NextAuthOptions = {
         }
       })
 
+      await db.isGetItems.create({
+        data: {
+          userId: user.id
+        }
+      })
+
       await db.entrance.create({
         data: {
           userId: user.id

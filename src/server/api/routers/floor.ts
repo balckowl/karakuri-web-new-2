@@ -8,13 +8,23 @@ import {
 import { db } from "~/server/db";
 
 export const floorRouter = createTRPCRouter({
-    updateCurrentRoom: protectedProcedure.input(z.object({ userId: z.string(), room: z.string() })).mutation(({ input }) => {
-        return db.user.update({
+    updateCurrentRoom: publicProcedure.input(z.object({ userId: z.string(), room: z.string() })).mutation(async({ input }) => {
+        await db.user.update({
             where: {
                 id: input.userId
             },
             data: {
                 currentRoom: input.room
+            }
+        })
+    }),
+    updateIsGetItems_scorllBar: protectedProcedure.input(z.object({ userId: z.string(), scrollBar: z.boolean() })).mutation(async ({ input }) => {
+        await db.isGetItems.update({
+            where: {
+                userId: input.userId
+            },
+            data: {
+                scrollBar: input.scrollBar
             }
         })
     }),
@@ -46,7 +56,7 @@ export const floorRouter = createTRPCRouter({
             }
         })
     }),
-    createBelongings: protectedProcedure.input(z.object({ userId: z.string(), belonging: z.string() })).mutation(async ({ input }) => {
+    createBelongingsData: protectedProcedure.input(z.object({ userId: z.string(), belonging: z.string() })).mutation(async ({ input }) => {
         return await db.belonging.create({
             data: {
                 userId: input.userId,

@@ -9,8 +9,8 @@ import { db } from "~/server/db";
 
 export const entranceRouter = createTRPCRouter({
     //get
-    getEntranceData: protectedProcedure.input(z.object({ userId: z.string() })).query(({ input }) => {
-        const requiredEntraceRoomData = db.user.findUnique({
+    getEntranceData: protectedProcedure.input(z.object({ userId: z.string() })).query(async({ input }) => {
+        const requiredEntraceRoomData = await db.user.findUnique({
             where: {
                 id: input.userId
             },
@@ -38,38 +38,18 @@ export const entranceRouter = createTRPCRouter({
             }
         })
     }),
-    updateEntranceData_eventIndex: protectedProcedure.input(z.object({ userId: z.string(), eventIndex: z.number() })).mutation(async({ input }) => {
+    updateEntranceData_FinishedSendingText: protectedProcedure.input(z.object({ userId: z.string(), eventIndex: z.number(), event0Finished: z.boolean() })).mutation(async({ input }) => {
         const tmp =  await db.entrance.update({
             where: {
                 userId: input.userId
             },
             data: {
-                eventIndex: input.eventIndex
+                eventIndex: input.eventIndex,
+                event0Finished: input.event0Finished
             }
         })
         return tmp
     }),
-    updateEntranceData_event0Finished: protectedProcedure.input(z.object({ userId: z.string(), event0Finished: z.boolean() })).mutation(async({ input }) => {
-        const tmp2 =  db.entrance.update({
-            where: {
-                userId: input.userId
-            },
-            data: {
-                event0Finished: input.event0Finished
-            }
-        })
-        return tmp2
-    }),
-    // updateEntranceData_isFirstClear: protectedProcedure.input(z.object({ userId: z.string(), isFirstClear: z.boolean() })).mutation(({ input }) => {
-    //     return db.entrance.update({
-    //         where: {
-    //             userId: input.userId
-    //         },
-    //         data: {
-    //             event0Finished: input.isFirstClear
-    //         }
-    //     })
-    // }),
     updateEntranceData_isClear: protectedProcedure.input(z.object({ userId: z.string(), isClear: z.boolean() })).mutation(({ input }) => {
         return db.entrance.update({
             where: {

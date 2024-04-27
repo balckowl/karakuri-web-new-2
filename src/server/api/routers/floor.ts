@@ -8,8 +8,8 @@ import {
 import { db } from "~/server/db";
 
 export const floorRouter = createTRPCRouter({
-    updateCurrentRoom: protectedProcedure.input(z.object({ userId: z.string(), room: z.string() })).mutation(async ({ input }) => {
-        return await db.user.update({
+    updateCurrentRoom: protectedProcedure.input(z.object({ userId: z.string(), room: z.string() })).mutation(({ input }) => {
+        return db.user.update({
             where: {
                 id: input.userId
             },

@@ -5,7 +5,7 @@ import RightArrow from "~/app/_components/elements/roomChangeArrow/rightArrow/ri
 import ProbBase from "~/app/_components/layout/roomBase/probBase"
 import Belongings from "~/app/_components/elements/belongings/belongings"
 import { usePlayerDataStore } from "~/store/playerDataStore"
-import { useEffect } from "react"
+import { useCallback, useEffect } from "react"
 
 import ProbClearAlert from "~/app/_components/elements/probClearAlert/probClearAlert"
 import EntranceSendingText from "~/features/sendingText/entranceSendingText"
@@ -15,8 +15,8 @@ import { api } from "~/trpc/react"
 
 const EntranceComponent = ({ username, userId }: { username: string, userId: string }) => {
   const { playerData, setPlayerData } = usePlayerDataStore();
-  const entranceData = api.floor1.getEntranceData.useQuery({ userId: userId })
-  const updateCurrentRoom = api.floor.updateCurrentRoom.useMutation({})
+  const entranceData = api.entrance.getEntranceData.useQuery({ userId: userId })
+  const updateCurrentRoom = api.floor.updateCurrentRoom.useMutation()
   console.log(entranceData.data)
   const handleEnterRoom = () => {
     updateCurrentRoom.mutate({
@@ -26,18 +26,18 @@ const EntranceComponent = ({ username, userId }: { username: string, userId: str
   }
 
   // 現在位置の更新
-  useEffect(() => {
+  useCallback(() => {
     handleEnterRoom()
-    setPlayerData(
-      {
-        currentRoom: "entrance",
-        entrance: {
-          ...playerData.entrance,
-          isFirstClear: false,
-        }
-      }
-    )
-  }, [setPlayerData])
+    // setPlayerData(
+    //   {
+    //     currentRoom: "entrance",
+    //     entrance: {
+    //       ...playerData.entrance,
+    //       isFirstClear: false,
+    //     }
+    //   }
+    // )
+  }, [])
 
   return (
     <div>

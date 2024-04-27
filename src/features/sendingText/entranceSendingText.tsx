@@ -5,18 +5,14 @@ import { usePlayerDataStore } from "~/store/playerDataStore";
 import PartSendingText from "~/app/_components/elements/sendingText/partSendingText";
 import { api } from "~/trpc/react";
 
-const EntranceSendingText = ({ userId, username, eventIndex }: { userId: string, username: string, eventIndex:number}) => {
-  const updateEntranceData_eventIndex = api.entrance.updateEntranceData_eventIndex.useMutation()
-  const updateEntranceData_event0Finished = api.entrance.updateEntranceData_event0Finished.useMutation()
+const EntranceSendingText = ({ userId, username, eventIndex }: { userId: string, username: string, eventIndex: number }) => {
+  const updateEntranceData_FinishedSendingText = api.entrance.updateEntranceData_FinishedSendingText.useMutation()
 
-  const finishSendingText = async() => {
-    await updateEntranceData_event0Finished.mutate({
+  const finishSendingText = async () => {
+    updateEntranceData_FinishedSendingText.mutate({
       userId: userId,
+      eventIndex: -1,
       event0Finished: true,
-    })
-    await updateEntranceData_eventIndex.mutate({
-      userId: userId,
-      eventIndex: -1
     })
   }
   // テキスト

@@ -9,7 +9,7 @@ import Prob2_1 from "~/features/prob/prob2_1";
 import Prob2_2 from "~/features/prob/prob2_2";
 import Prob3_1 from "~/features/prob/prob3_1";
 
-const ProbBase = ({currentRoom}: {currentRoom: string}) => {
+const ProbBase = ({event0Finished, currentRoom}: {event0Finished: boolean, currentRoom: string}) => {
   // dbに書き換える 
   const { playerData } = usePlayerDataStore(); 
 
@@ -17,7 +17,7 @@ const ProbBase = ({currentRoom}: {currentRoom: string}) => {
     <div>
       {currentRoom === "entrance" ?
         <div>
-          {playerData.entrance.event0Finished &&
+          {event0Finished &&
             <div>
               <motion.div
                 animate={{ opacity: [0, 1] }}

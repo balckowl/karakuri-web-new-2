@@ -8,15 +8,27 @@ import { usePlayerDataStore } from "~/store/playerDataStore"
 import { api } from "~/trpc/react"
 
 const BathroomComponent = ({ userId }: { userId: string }) => {
-  const bathroomData = api.floor1.getBathRoomData.useQuery({ userId: userId })
+  const bathroomData = api.bathroom.getBathRoomData.useQuery({ userId: userId })
+  const updateCurrentRoom = api.floor.updateCurrentRoom.useMutation({})
 
-  console.log(bathroomData.data)
-  const { setPlayerData } = usePlayerDataStore();
+  // const { setPlayerData } = usePlayerDataStore();
+  // 現在位置の更新
+  // useEffect(() => {
+  //   setPlayerData({ currentRoom: "bathroom" })
+  // }, [setPlayerData])
+  
+  const handleEnterRoom = () => {
+    updateCurrentRoom.mutate({
+      userId: userId,
+      room: "bathroom",
+    })
+  }
+
   // 現在位置の更新
   useEffect(() => {
-    setPlayerData({ currentRoom: "bathroom" })
-  }, [setPlayerData])
-
+    handleEnterRoom()
+  }, [])
+  
   return (
     <div>
       <RightArrow floor={1} hrefProps={"entrance"} />

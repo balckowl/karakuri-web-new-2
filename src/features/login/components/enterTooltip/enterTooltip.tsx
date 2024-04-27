@@ -16,9 +16,10 @@ const EnterTooltip = () => {
     setIsHover(false);
   };
 
-  const enterHall = async() => {
+  const enterHall = async () => {
     setPlayerData({ currentFloor: 1 })
     signIn("google", { callbackUrl: "/floor1/entrance" })
+    // signIn("google")
   }
 
   return (

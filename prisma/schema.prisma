@@ -54,14 +54,27 @@ model Session {
 }
 
 model User {
-    id            String    @id @default(cuid())
+    id            String        @id @default(cuid())
     name          String?
-    email         String?   @unique
+    email         String?       @unique
     emailVerified DateTime?
     image         String?
     accounts      Account[]
     sessions      Session[]
     posts         Post[]
+    currentRoom   String?       @default("login")
+    belonging     String?       @default("")
+    progress      Int?          @default(0)
+    movableRooms  MovableRoom[]
+    belongings    Belonging[]
+    isGetItems    IsGetItems?
+    elevator      Elevator?
+    entrance      Entrance?
+    bathroom      Bathroom?
+    cafeteria     Cafeteria?
+    kitchen       Kitchen?
+    socialRoom    SocialRoom?
+    storeRoom     StoreRoom?
 }
 
 model VerificationToken {
@@ -70,4 +83,93 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+model MovableRoom {
+    roomId   Int    @id @default(autoincrement())
+    userId   String
+    roomName String
+    user     User   @relation(fields: [userId], references: [id])
+}
+
+model Belonging {
+    belongingId   Int    @id @default(autoincrement())
+    userId        String
+    belongingName String
+    user          User   @relation(fields: [userId], references: [id])
+}
+
+model IsGetItems {
+    isGetItemId   Int     @id @default(autoincrement())
+    userId        String  @unique
+    scrollBar     Boolean @default(false)
+    woodenBoard   Boolean @default(false)
+    stone         Boolean @default(false)
+    branchAndRope Boolean @default(false)
+    user          User    @relation(fields: [userId], references: [id])
+}
+
+model Elevator {
+    elevatorId     Int     @id @default(autoincrement())
+    userId         String  @unique
+    eventIndex     Int     @default(0)
+    event0Finished Boolean @default(false)
+    user           User    @relation(fields: [userId], references: [id])
+}
+
+model Entrance {
+    entranceId     Int     @id @default(autoincrement())
+    userId         String  @unique
+    isFitScrollbar Boolean @default(false)
+    eventIndex     Int     @default(0)
+    event0Finished Boolean @default(false)
+    isFirstClear   Boolean @default(false)
+    isClear        Boolean @default(false)
+    user           User    @relation(fields: [userId], references: [id])
+}
+
+model Bathroom {
+    bathroomId     Int     @id @default(autoincrement())
+    userId         String  @unique
+    eventIndex     Int     @default(0)
+    event0Finished Boolean @default(true)
+    user           User    @relation(fields: [userId], references: [id])
+}
+
+model Cafeteria {
+    cafeteriaId    Int     @id @default(autoincrement())
+    userId         String  @unique
+    eventIndex     Int     @default(0)
+    event0Finished Boolean @default(true)
+    user           User    @relation(fields: [userId], references: [id])
+}
+
+model Kitchen {
+    kitchenId      Int     @id @default(autoincrement())
+    userId         String  @unique
+    isClickRock    Boolean @default(false)
+    eventIndex     Int     @default(0)
+    event0Finished Boolean @default(true)
+    isFirstClear   Boolean @default(false)
+    isClear        Boolean @default(false)
+    user           User    @relation(fields: [userId], references: [id])
+}
+
+model SocialRoom {
+    socialRoomId   Int     @id @default(autoincrement())
+    userId         String  @unique
+    isLighting     Boolean @default(false)
+    eventIndex     Int     @default(0)
+    event0Finished Boolean @default(false)
+    isFirstClear   Boolean @default(false)
+    isClear        Boolean @default(false)
+    user           User    @relation(fields: [userId], references: [id])
+}
+
+model StoreRoom {
+    storeRoomId    Int     @id @default(autoincrement())
+    userId         String  @unique
+    eventIndex     Int     @default(0)
+    event0Finished Boolean @default(true)
+    user           User    @relation(fields: [userId], references: [id])
 }

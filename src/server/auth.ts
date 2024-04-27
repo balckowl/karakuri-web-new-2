@@ -6,6 +6,7 @@ import {
 } from "next-auth";
 import { type Adapter } from "next-auth/adapters";
 import GoogleProvider from "next-auth/providers/google";
+import { userAgent } from "next/server";
 
 import { env } from "~/env";
 import { db } from "~/server/db";
@@ -62,6 +63,64 @@ export const authOptions: NextAuthOptions = {
      * @see https://next-auth.js.org/providers/github
      */
   ],
+  events: {
+    createUser: async ({ user }) => {
+
+      //movableRoomの初期化
+      await db.movableRoom.createMany({
+        data: [{
+          userId: user.id,
+          roomName: "entrance"
+        }, {
+          userId: user.id,
+          roomName: "bathroom"
+        }]
+      })
+
+      await db.elevator.create({
+        data: {
+          userId: user.id
+        }
+      })
+
+      await db.entrance.create({
+        data: {
+          userId: user.id
+        }
+      })
+
+      await db.bathroom.create({
+        data: {
+          userId: user.id
+        }
+      })
+
+      await db.cafeteria.create({
+        data: {
+          userId: user.id
+        }
+      })
+
+      await db.kitchen.create({
+        data: {
+          userId: user.id
+        }
+      })
+
+      await db.socialRoom.create({
+        data: {
+          userId: user.id
+        }
+      })
+
+      await db.storeRoom.create({
+        data: {
+          userId: user.id
+        }
+      })
+
+    }
+  }
 };
 
 /**

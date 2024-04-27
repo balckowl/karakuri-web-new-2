@@ -3,8 +3,22 @@ import { useState, useEffect, useMemo } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePlayerDataStore } from "~/store/playerDataStore";
 import PartSendingText from "~/app/_components/elements/sendingText/partSendingText";
+import { api } from "~/trpc/react";
 
-const EntranceSendingText = ({ username, eventIndex }: { username: string, eventIndex:number }) => {
+const EntranceSendingText = ({ userId, username, eventIndex }: { userId: string, username: string, eventIndex:number}) => {
+  const updateEntranceData_eventIndex = api.entrance.updateEntranceData_eventIndex.useMutation()
+  const updateEntranceData_event0Finished = api.entrance.updateEntranceData_event0Finished.useMutation()
+
+  const finishSendingText = async() => {
+    await updateEntranceData_event0Finished.mutate({
+      userId: userId,
+      event0Finished: true,
+    })
+    await updateEntranceData_eventIndex.mutate({
+      userId: userId,
+      eventIndex: -1
+    })
+  }
   // テキスト
   const entranceTextList = useMemo(() => {
     return {
@@ -47,17 +61,19 @@ const EntranceSendingText = ({ username, eventIndex }: { username: string, event
   useEffect(() => {
     if (0 <= eventIndex) {
       setRenderTrigger(prev => prev + 1);
+      //  テキスト送りが終わった時のフェッチ
       if (textIndex == entranceTextList[eventIndex as keyof typeof entranceTextList].length) {
-        setPlayerData(
-          {
-            entrance:
-            {
-              ...playerData.entrance,
-              eventIndex: -1,
-              event0Finished: true,
-            }
-          }
-        );
+        finishSendingText()
+        // setPlayerData(
+        //   {
+        //     entrance:
+        //     {
+        //       ...playerData.entrance,
+        //       eventIndex: -1,
+        //       event0Finished: true,
+        //     }
+        //   }
+        // );
         setTextIndex(0);
       }
     }

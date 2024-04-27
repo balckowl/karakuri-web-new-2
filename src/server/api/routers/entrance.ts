@@ -38,8 +38,8 @@ export const entranceRouter = createTRPCRouter({
             }
         })
     }),
-    updateEntranceData_eventIndex: protectedProcedure.input(z.object({ userId: z.string(), eventIndex: z.number() })).mutation(({ input }) => {
-        return db.entrance.update({
+    updateEntranceData_eventIndex: protectedProcedure.input(z.object({ userId: z.string(), eventIndex: z.number() })).mutation(async({ input }) => {
+        const tmp =  await db.entrance.update({
             where: {
                 userId: input.userId
             },
@@ -47,9 +47,10 @@ export const entranceRouter = createTRPCRouter({
                 eventIndex: input.eventIndex
             }
         })
+        return tmp
     }),
-    updateEntranceData_event0Finished: protectedProcedure.input(z.object({ userId: z.string(), event0Finished: z.boolean() })).mutation(({ input }) => {
-        return db.entrance.update({
+    updateEntranceData_event0Finished: protectedProcedure.input(z.object({ userId: z.string(), event0Finished: z.boolean() })).mutation(async({ input }) => {
+        const tmp2 =  db.entrance.update({
             where: {
                 userId: input.userId
             },
@@ -57,6 +58,7 @@ export const entranceRouter = createTRPCRouter({
                 event0Finished: input.event0Finished
             }
         })
+        return tmp2
     }),
     // updateEntranceData_isFirstClear: protectedProcedure.input(z.object({ userId: z.string(), isFirstClear: z.boolean() })).mutation(({ input }) => {
     //     return db.entrance.update({

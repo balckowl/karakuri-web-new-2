@@ -16,10 +16,10 @@ import { api } from "~/trpc/react"
 const EntranceComponent = ({ username, userId }: { username: string, userId: string }) => {
   const { playerData, setPlayerData } = usePlayerDataStore();
   const entranceData = api.floor1.getEntranceData.useQuery({ userId: userId })
-  const update_CurrentRoom = api.floor.updateCurrentRoom.useMutation({})
-
+  const updateCurrentRoom = api.floor.updateCurrentRoom.useMutation({})
+  console.log(entranceData.data)
   const handleEnterRoom = () => {
-    update_CurrentRoom.mutate({
+    updateCurrentRoom.mutate({
       userId: userId,
       room: "entrance",
     })
@@ -41,7 +41,7 @@ const EntranceComponent = ({ username, userId }: { username: string, userId: str
 
   return (
     <div>
-      <EntranceSendingText username={username} eventIndex={entranceData.data?.entrance?.eventIndex}/>
+      {entranceData.data?.entrance && <EntranceSendingText userId={userId} username={username} eventIndex={entranceData.data?.entrance?.eventIndex}/>}
 
       <UpArrow floor={1} hrefProps={"socialroom"} />
       <RightArrow floor={1} hrefProps={"cafeteria"} />

@@ -1,6 +1,7 @@
 import { postRouter } from "~/server/api/routers/post";
 import { createCallerFactory, createTRPCRouter } from "~/server/api/trpc";
 import { floor1Router } from "./routers/floor1";
+import { floorRouter } from "./routers/floor";
 
 /**
  * This is the primary router for your server.
@@ -9,6 +10,7 @@ import { floor1Router } from "./routers/floor1";
  */
 export const appRouter = createTRPCRouter({
   post: postRouter,
+  floor: floorRouter,
   //ここに新しいtrpcのファイルを追加
   floor1: floor1Router
 });

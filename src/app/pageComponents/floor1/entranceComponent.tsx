@@ -30,7 +30,7 @@ const EntranceComponent = ({ username, userId }: { username: string, userId: str
   }
 
   // 現在位置の更新
-  useEffect(() => {
+  useCallback(() => {
     handleEnterRoom()
     // setPlayerData(
     //   {

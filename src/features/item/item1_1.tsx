@@ -4,28 +4,38 @@ import GetItemPopup from "~/app/_components/elements/getItemPopUp/getItemPopUp";
 import { usePlayerDataStore } from "~/store/playerDataStore";
 import { api } from "~/trpc/react";
 
-const Item1_1 = () => {
+const Item1_1 = ({ userId }: { userId: string }) => {
   const { playerData, setPlayerData } = usePlayerDataStore();
   const preBelongings: string[] = playerData.belongingList;
   const [isGetItem, setIsGetItem] = useState<boolean>(false);
+  const updateBathRoomData = api.bathroom.updateBathroomData.useMutation({})
 
   const getScrollBar = () => {
     setIsGetItem(true);
     // アイテムを取った判定 & 持ち物の追加 & エントランスの会話フラグ
-    setPlayerData(
-      {
-        isGetItems: {
-          ...playerData.isGetItems,
-          scrollBar: true,
-        },
-        belongingList: [...preBelongings, "scrollBar"],
-        entrance: {
-          ...playerData.entrance,
-          eventIndex: 1,
-          event0Finished: true
-        }
-      }
-    )
+
+    updateBathRoomData.mutate({
+      userId: userId,
+      scrollBar: true,
+      newItem: "scrollBar",
+      eventIndex:1,
+      event0Finished: true
+    })
+
+    // setPlayerData(
+    //   {
+    //     isGetItems: {
+    //       ...playerData.isGetItems,
+    //       scrollBar: true,
+    //     },
+    //     belongingList: [...preBelongings, "scrollBar"],
+    //     entrance: {
+    //       ...playerData.entrance,
+    //       eventIndex: 1,
+    //       event0Finished: true
+    //     }
+    //   }
+    // )
   }
 
   return (

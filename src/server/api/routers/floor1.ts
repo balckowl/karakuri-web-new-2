@@ -8,6 +8,7 @@ import {
 import { db } from "~/server/db";
 
 export const floor1Router = createTRPCRouter({
+  //get
   getEntranceData: protectedProcedure.input(z.object({ userId: z.string() })).query(({ input }) => {
     const requiredEntraceRoomData = db.user.findUnique({
       where: {
@@ -86,7 +87,7 @@ export const floor1Router = createTRPCRouter({
     })
     return requiredStoreRoomData;
   }),
-  getElevatorData: publicProcedure.input(z.object({ userId: z.string() })).query(({ input }) => {
+  getElevatorData: protectedProcedure.input(z.object({ userId: z.string() })).query(({ input }) => {
     const requiredElevatorRoomData = db.user.findUnique({
       where: {
         id: input.userId
@@ -98,5 +99,22 @@ export const floor1Router = createTRPCRouter({
       }
     })
     return requiredElevatorRoomData;
+  }),
+
+  // isFitScrollbar
+  //   eventIndex     
+  //   event0Finished 
+  //   isFirstClear   
+  //   isClear 
+  //update
+  updateEntranceData: protectedProcedure.input(z.object({ userId: z.string(), isFitScrollbar:z.string(), eventIndex: z.number(), event0Finished: z.boolean(), isFirstClear: z.boolean(), isClear: z.boolean()})).mutation(({input})=>{
+    return db.entrance.update({
+      where:{
+        userId: input.userId
+      },
+      data: {
+        
+      }
+    })
   })
 });

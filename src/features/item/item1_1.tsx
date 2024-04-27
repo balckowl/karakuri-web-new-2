@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useState } from "react";
 import GetItemPopup from "~/app/_components/elements/getItemPopUp/getItemPopUp";
 import { usePlayerDataStore } from "~/store/playerDataStore";
+import { api } from "~/trpc/react";
 
 const Item1_1 = () => {
   const { playerData, setPlayerData } = usePlayerDataStore();

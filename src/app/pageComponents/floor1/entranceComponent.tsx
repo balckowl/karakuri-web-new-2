@@ -11,12 +11,16 @@ import ProbClearAlert from "~/app/_components/elements/probClearAlert/probClearA
 import EntranceSendingText from "~/features/sendingText/entranceSendingText"
 import Floor1Map from "~/app/_components/elements/floormap/floor1/floor1Map"
 import { api } from "~/trpc/react"
+import { useRouter } from "next/navigation"
 
 
 const EntranceComponent = ({ username, userId }: { username: string, userId: string }) => {
-  const { playerData, setPlayerData } = usePlayerDataStore();
+  const router = useRouter()
+
+  const { playerData } = usePlayerDataStore();
   const entranceData = api.entrance.getEntranceData.useQuery({ userId: userId })
-  const updateCurrentRoom = api.floor.updateCurrentRoom.useMutation()
+  const updateCurrentRoom = api.floor.updateCurrentRoom.useMutation({ onSuccess: () => {void router.refresh()}})
+
   console.log(entranceData.data)
   const handleEnterRoom = () => {
     updateCurrentRoom.mutate({
@@ -26,7 +30,7 @@ const EntranceComponent = ({ username, userId }: { username: string, userId: str
   }
 
   // 現在位置の更新
-  useCallback(() => {
+  useEffect(() => {
     handleEnterRoom()
     // setPlayerData(
     //   {
@@ -49,7 +53,7 @@ const EntranceComponent = ({ username, userId }: { username: string, userId: str
 
       <Floor1Map />
       <Belongings />
-      <ProbBase currentRoom={"entrance"} />
+      {entranceData.data?.entrance && <ProbBase event0Finished={entranceData.data?.entrance?.event0Finished} currentRoom={"entrance"} />}
 
       {playerData.entrance.isFirstClear &&
         <ProbClearAlert />
